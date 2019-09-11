@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">tbojovic-RideBook</string>
+    <string name="editor_title_add">Add a ride</string>
+    <string name="date_label">"Date: "</string>
+    <string name="date_placeholder">yyyy-mm-dd</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="set_date">SET DATE</string>
 </resources>
