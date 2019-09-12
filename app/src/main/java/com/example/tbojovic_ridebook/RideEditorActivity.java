@@ -19,4 +19,13 @@ public class RideEditorActivity extends AppCompatActivity {
         newFragment.show(getSupportFragmentManager(), "datePicker");
     }
 
+    public void onSetTimeClick(View view) {
+        DialogFragment timePickerFragment = new TimePickerFragment();
+        timePickerFragment.show(getSupportFragmentManager(), "timePicker");
+    }
+
+    public void onSave(View view) {
+
+    }
+
 }

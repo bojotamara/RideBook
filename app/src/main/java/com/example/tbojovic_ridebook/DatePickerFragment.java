@@ -5,7 +5,7 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.widget.DatePicker;
-import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.fragment.app.DialogFragment;
 
@@ -28,7 +28,7 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
     }
 
     public void onDateSet(DatePicker view, int year, int month, int day) {
-        EditText tvDate = getActivity().findViewById(R.id.dateInput);
+        TextView tvDate = getActivity().findViewById(R.id.dateInput);
         LocalDate date = LocalDate.of(year, month + 1, day);
         tvDate.setText(date.toString());
     }

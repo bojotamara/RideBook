@@ -8,8 +8,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
-import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,8 +34,8 @@ public class MainActivity extends AppCompatActivity {
 
         // specify an adapter (see also next example)
         List<Ride> mylist = new ArrayList<Ride>();
-        Ride ride1 = new Ride(LocalDate.now(), Duration.ofMinutes(30), 10.0, 2);
-        Ride ride2 = new Ride(LocalDate.now(), Duration.ofMinutes(56), 30.0, 3);
+        Ride ride1 = new Ride(LocalDate.now(), LocalTime.now(), 10.0, 67,2);
+        Ride ride2 = new Ride(LocalDate.now(), LocalTime.now(), 30.0, 76, 3);
         mylist.add(ride1);
         mylist.add(ride2);
 

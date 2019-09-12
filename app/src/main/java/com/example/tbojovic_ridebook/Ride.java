@@ -1,26 +1,28 @@
 package com.example.tbojovic_ridebook;
 
 import java.time.LocalDate;
-import java.time.Duration;
+import java.time.LocalTime;
 import java.util.List;
 
 public class Ride {
     private LocalDate date; // this is immutable
-    private Duration time;
+    private LocalTime time; // so is this i believe
     private double distance;
+    private int averageSpeed;
     private int averageCadence;
     private String comment;
 
-    public Ride(LocalDate date, Duration time, double distance, int averageCadence) {
+    public Ride(LocalDate date, LocalTime time, double distance, int averageSpeed, int averageCadence) {
         this.date = date;
         this.time = time;
         this.distance = distance;
         this.averageCadence = averageCadence;
+        this.averageSpeed = averageSpeed;
         this.comment = "";
     }
 
-    public Ride(LocalDate date, Duration time, double distance, int averageCadence, String comment) {
-        this(date, time, distance, averageCadence );
+    public Ride(LocalDate date, LocalTime time, double distance, int averageSpeed, int averageCadence, String comment) {
+        this(date, time, distance, averageCadence, averageSpeed );
         this.comment = comment;
     }
 
@@ -32,11 +34,11 @@ public class Ride {
         this.date = date;
     }
 
-    public Duration getTime() {
+    public LocalTime getTime() {
         return this.time;
     }
 
-    public void setTime(Duration time) {
+    public void setTime(LocalTime time) {
         this.time = time;
     }
 
@@ -46,6 +48,14 @@ public class Ride {
 
     public void setDistance(double dist) {
         this.distance = dist;
+    }
+
+    public int getAverageSpeed() {
+        return averageSpeed;
+    }
+
+    public void setAverageSpeed(int averageSpeed) {
+        this.averageSpeed = averageSpeed;
     }
 
     public int getAverageCadence() {
@@ -62,11 +72,6 @@ public class Ride {
 
     public void setComment(String comment) {
         this.comment = comment;
-    }
-
-    public double getAverageSpeed() {
-        double hours = this.time.toMinutes()/60.0;
-        return this.distance/hours;
     }
 
     static double totalDistance(List<Ride> rides) {
