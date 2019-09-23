@@ -12,9 +12,12 @@
         <activity
             android:name=".RideEditorActivity"
             android:parentActivityName=".MainActivity"
-            android:label="@string/editor_title_add">
+            android:label="@string/editor_title_add"
+            android:theme="@style/RideEditorTheme">
         </activity>
-        <activity android:name=".MainActivity">
+        <activity
+            android:name=".MainActivity"
+            android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

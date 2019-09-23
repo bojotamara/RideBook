@@ -1,18 +1,19 @@
 package com.example.tbojovic_ridebook;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
-public class Ride {
+public class Ride implements Serializable {
     private LocalDate date; // this is immutable
     private LocalTime time; // so is this i believe
     private double distance;
-    private int averageSpeed;
+    private double averageSpeed;
     private int averageCadence;
     private String comment;
 
-    public Ride(LocalDate date, LocalTime time, double distance, int averageSpeed, int averageCadence) {
+    public Ride(LocalDate date, LocalTime time, double distance, double averageSpeed, int averageCadence) {
         this.date = date;
         this.time = time;
         this.distance = distance;
@@ -21,8 +22,8 @@ public class Ride {
         this.comment = "";
     }
 
-    public Ride(LocalDate date, LocalTime time, double distance, int averageSpeed, int averageCadence, String comment) {
-        this(date, time, distance, averageCadence, averageSpeed );
+    public Ride(LocalDate date, LocalTime time, double distance, double averageSpeed, int averageCadence, String comment) {
+        this(date, time, distance,  averageSpeed , averageCadence);
         this.comment = comment;
     }
 
@@ -50,11 +51,11 @@ public class Ride {
         this.distance = dist;
     }
 
-    public int getAverageSpeed() {
+    public double getAverageSpeed() {
         return averageSpeed;
     }
 
-    public void setAverageSpeed(int averageSpeed) {
+    public void setAverageSpeed(double averageSpeed) {
         this.averageSpeed = averageSpeed;
     }
 

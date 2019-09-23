@@ -19,6 +19,7 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         // Use the current date as the default date in the picker
+        //TODO: use the current date OR the one already selected in the date picker
         final LocalDate date = LocalDate.now();
         int year = date.getYear();
         int month = date.getMonthValue() - 1; // DatePickerDialog accepts a zero indexed month
