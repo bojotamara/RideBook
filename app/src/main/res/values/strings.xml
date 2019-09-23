@@ -19,4 +19,6 @@
     <string name="date">Date</string>
     <string name="distance">Distance</string>
     <string name="time">Time</string>
+    <string name="list_empty">You currently have no rides.</string>
+    <string name="km">km</string>
 </resources>

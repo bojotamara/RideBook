@@ -37,12 +37,7 @@ public class MainActivity extends AppCompatActivity implements RideRecyclerAdapt
         this.recyclerView.addItemDecoration(new DividerItemDecoration(this,
                 DividerItemDecoration.VERTICAL));
 
-        // specify an adapter (see also next example)
         rideList = new ArrayList<>();
-        Ride ride1 = new Ride(LocalDate.now(), LocalTime.of(12, 1), 10.0, 67,2);
-        Ride ride2 = new Ride(LocalDate.now(), LocalTime.of(15, 30), 30.0, 76, 3);
-        rideList.add(ride1);
-        rideList.add(ride2);
 
         updateDistanceTotal();
 
@@ -77,6 +72,10 @@ public class MainActivity extends AppCompatActivity implements RideRecyclerAdapt
         rideList.remove(position);
         mAdapter.notifyItemRemoved(position);
         updateDistanceTotal();
+        if (rideList.isEmpty()) {
+            recyclerView.setVisibility(View.GONE);
+            findViewById(R.id.emptyList).setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -85,6 +84,10 @@ public class MainActivity extends AppCompatActivity implements RideRecyclerAdapt
             Ride ride = (Ride) resultIntent.getSerializableExtra("ride");
             rideList.add(ride);
             mAdapter.notifyItemInserted(rideList.size()-1);
+            if (rideList.size() == 1) {
+                findViewById(R.id.emptyList).setVisibility(View.GONE);
+                recyclerView.setVisibility(View.VISIBLE);
+            }
         } else if (requestCode == EDIT_RIDE_REQUEST && resultCode == RESULT_OK) {
             Ride ride = (Ride) resultIntent.getSerializableExtra("ride");
             int position = resultIntent.getIntExtra("position", -1);
