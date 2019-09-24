@@ -15,12 +15,10 @@ import com.example.tbojovic_ridebook.models.Ride;
 import com.example.tbojovic_ridebook.adapters.RideRecyclerAdapter;
 
 import java.util.ArrayList;
-import java.util.List;
-
 public class MainActivity extends AppCompatActivity implements RideRecyclerAdapter.OnDeleteClickListener {
     private RecyclerView recyclerView;
     private RideRecyclerAdapter recyclerAdapter;
-    private List<Ride> rideList;
+    private ArrayList<Ride> rideList;
     final int ADD_RIDE_REQUEST = 1;
     final int EDIT_RIDE_REQUEST = 2;
 
@@ -28,23 +26,20 @@ public class MainActivity extends AppCompatActivity implements RideRecyclerAdapt
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        this.recyclerView = findViewById(R.id.ridesRecyclerView);
 
-        // use this setting to improve performance if you know that changes
-        // in content do not change the layout size of the RecyclerView
-        this.recyclerView.setHasFixedSize(true);
+        recyclerView = findViewById(R.id.ridesRecyclerView);
+        recyclerView.setHasFixedSize(true);
 
-        // use a linear layout manager
-        this.recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        this.recyclerView.addItemDecoration(new DividerItemDecoration(this,
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.addItemDecoration(new DividerItemDecoration(this,
                 DividerItemDecoration.VERTICAL));
 
         rideList = new ArrayList<>();
 
         updateDistanceTotal();
 
-        this.recyclerAdapter = new RideRecyclerAdapter(rideList, this);
-        this.recyclerView.setAdapter(recyclerAdapter);
+        recyclerAdapter = new RideRecyclerAdapter(rideList, this);
+        recyclerView.setAdapter(recyclerAdapter);
     }
 
     @Override
@@ -53,9 +48,8 @@ public class MainActivity extends AppCompatActivity implements RideRecyclerAdapt
         recyclerAdapter.resetSelectedPosition();
     }
 
-    public void handleAddClick(View view) {
+    public void onAddClick(View view) {
         Intent intent = new Intent(this, RideEditorActivity.class);
-
         startActivityForResult(intent, ADD_RIDE_REQUEST);
     }
 

@@ -1,5 +1,6 @@
 package com.example.tbojovic_ridebook.activities;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 
@@ -21,7 +22,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class RideEditorActivity extends AppCompatActivity {
+public class RideEditorActivity extends AppCompatActivity
+        implements DatePickerFragment.OnDatePickerListener, TimePickerFragment.OnTimePickerListener {
+
     private TextView dateInput, timeInput;
     private EditText distanceInput, speedInput, cadenceInput, commentInput;
     private int position = -1;
@@ -34,12 +37,12 @@ public class RideEditorActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         Ride ride = (Ride) intent.getSerializableExtra("ride");
+
         if (ride != null) {
             position = intent.getIntExtra("position", -1);
             setTitle(R.string.editor_title_edit);
             populateInput(ride);
         }
-
     }
 
     public void onSetDateClick(View view) {
@@ -47,9 +50,19 @@ public class RideEditorActivity extends AppCompatActivity {
         newFragment.show(getSupportFragmentManager(), "datePicker");
     }
 
+    @Override
+    public void onDatePicked(LocalDate date) {
+        dateInput.setText(date.toString());
+    }
+
     public void onSetTimeClick(View view) {
         DialogFragment timePickerFragment = new TimePickerFragment();
         timePickerFragment.show(getSupportFragmentManager(), "timePicker");
+    }
+
+    @Override
+    public void onTimePicked(LocalTime time) {
+        timeInput.setText(time.toString());
     }
 
     public void onSave(View view) {
@@ -67,7 +80,7 @@ public class RideEditorActivity extends AppCompatActivity {
         }
     }
 
-    @org.jetbrains.annotations.Nullable
+    @Nullable
     private Ride getRideFromInput() {
         String dateString = dateInput.getText().toString(),
             timeString = timeInput.getText().toString(),

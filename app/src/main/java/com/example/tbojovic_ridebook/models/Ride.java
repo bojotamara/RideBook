@@ -6,8 +6,8 @@ import java.time.LocalTime;
 import java.util.List;
 
 public class Ride implements Serializable {
-    private LocalDate date; // this is immutable
-    private LocalTime time; // so is this i believe
+    private LocalDate date;
+    private LocalTime time;
     private double distance;
     private double averageSpeed;
     private int averageCadence;
@@ -25,6 +25,14 @@ public class Ride implements Serializable {
     public Ride(LocalDate date, LocalTime time, double distance, double averageSpeed, int averageCadence, String comment) {
         this(date, time, distance,  averageSpeed , averageCadence);
         this.comment = comment;
+    }
+
+    static public double totalDistance(List<Ride> rides) {
+        double total = 0;
+        for (Ride ride : rides) {
+            total += ride.getDistance();
+        }
+        return total;
     }
 
     public LocalDate getDate() {
@@ -68,19 +76,11 @@ public class Ride implements Serializable {
     }
 
     public String getComment() {
-        return this.comment; // how to return?
+        return this.comment;
     }
 
     public void setComment(String comment) {
         this.comment = comment;
-    }
-
-    static public double totalDistance(List<Ride> rides) {
-        double total = 0;
-        for (Ride ride : rides) {
-            total += ride.getDistance();
-        }
-        return total;
     }
 
 }

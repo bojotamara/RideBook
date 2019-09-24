@@ -4,6 +4,7 @@ package com.example.tbojovic_ridebook.adapters;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -11,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.tbojovic_ridebook.R;
 import com.example.tbojovic_ridebook.models.Ride;
 
-import java.util.List;
+import java.util.ArrayList;
 
 // Adapter creates view holders as needed, and binds view holders to their data
 public class RideRecyclerAdapter extends RecyclerView.Adapter<RideRecyclerAdapter.ViewHolder> {
@@ -21,13 +22,13 @@ public class RideRecyclerAdapter extends RecyclerView.Adapter<RideRecyclerAdapte
         void onDeleteClick(int pos);
     }
 
-    private List<Ride> mRides;
+    private ArrayList<Ride> rideList;
     private OnDeleteClickListener deleteClickListener;
     private int selectedPosition = -1; //maybe static?
 
     // Initial data is passed in from the constructor
-    public RideRecyclerAdapter(List<Ride> data, OnDeleteClickListener listener) {
-        this.mRides = data;
+    public RideRecyclerAdapter(ArrayList<Ride> data, OnDeleteClickListener listener) {
+        this.rideList = data;
         this.deleteClickListener = listener;
     }
 
@@ -35,9 +36,8 @@ public class RideRecyclerAdapter extends RecyclerView.Adapter<RideRecyclerAdapte
     // Complex data items may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder
     public  class ViewHolder extends RecyclerView.ViewHolder implements View.OnLongClickListener {
-        // each data item is just a string in this case
         private TextView tvDate, tvTime, tvDistance;
-        private View deleteButton;
+        private ImageButton deleteButton;
         public ViewHolder(View v) {
             super(v);
             tvDate = v.findViewById(R.id.RowDate);
@@ -48,7 +48,7 @@ public class RideRecyclerAdapter extends RecyclerView.Adapter<RideRecyclerAdapte
         }
 
         public void bind(Ride ride) {
-            //TODO: clean tbis shit up
+            //TODO: clean this shit up
             tvDate.setText(ride.getDate().toString());
             tvTime.setText(ride.getTime().toString());
             tvDistance.setText(String.valueOf(ride.getDistance()));
@@ -96,13 +96,13 @@ public class RideRecyclerAdapter extends RecyclerView.Adapter<RideRecyclerAdapte
     public void onBindViewHolder(ViewHolder holder, int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-        holder.bind(mRides.get(position));
+        holder.bind(rideList.get(position));
     }
 
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
-        return mRides.size();
+        return rideList.size();
     }
 
     public void resetSelectedPosition() {

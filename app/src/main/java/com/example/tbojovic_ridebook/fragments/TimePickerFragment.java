@@ -3,23 +3,26 @@ package com.example.tbojovic_ridebook.fragments;
 
 import android.app.Dialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.os.Bundle;
-import android.text.format.DateFormat;
-import android.widget.TextView;
 import android.widget.TimePicker;
 
 import androidx.fragment.app.DialogFragment;
-
-import com.example.tbojovic_ridebook.R;
 
 import java.time.LocalTime;
 
 
 public class TimePickerFragment extends DialogFragment implements TimePickerDialog.OnTimeSetListener {
+    private OnTimePickerListener listener;
+
+    public interface OnTimePickerListener {
+        void onTimePicked(LocalTime time);
+    }
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         // Use the current time as the default values for the picker
+        //TODO: use the current date OR the one already selected in the date picker
         final LocalTime time = LocalTime.now();
         int hour = time.getHour();
         int minute = time.getMinute();
@@ -28,10 +31,19 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
         return new TimePickerDialog(getActivity(), this, hour, minute, true);
     }
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof OnTimePickerListener) {
+            listener = (OnTimePickerListener) context;
+        } else {
+            throw new RuntimeException(context.toString() +
+                    " must implement OnTimePickerListener");
+        }
+    }
+
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-        // Do something with the time chosen by the user
-        TextView tvTime = getActivity().findViewById(R.id.timeInput);
         LocalTime time = LocalTime.of(hourOfDay, minute);
-        tvTime.setText(time.toString());
+        listener.onTimePicked(time);
     }
 }
