@@ -12,12 +12,12 @@ import android.widget.TextView;
 
 import com.example.tbojovic_ridebook.R;
 import com.example.tbojovic_ridebook.models.Ride;
-import com.example.tbojovic_ridebook.adapters.RideRecyclerAdapter;
+import com.example.tbojovic_ridebook.adapters.RideAdapter;
 
 import java.util.ArrayList;
-public class MainActivity extends AppCompatActivity implements RideRecyclerAdapter.OnDeleteClickListener {
+public class MainActivity extends AppCompatActivity implements RideAdapter.OnItemClickListener {
     private RecyclerView recyclerView;
-    private RideRecyclerAdapter recyclerAdapter;
+    private RideAdapter recyclerAdapter;
     private ArrayList<Ride> rideList;
     final int ADD_RIDE_REQUEST = 1;
     final int EDIT_RIDE_REQUEST = 2;
@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity implements RideRecyclerAdapt
 
         updateDistanceTotal();
 
-        recyclerAdapter = new RideRecyclerAdapter(rideList, this);
+        recyclerAdapter = new RideAdapter(rideList, this);
         recyclerView.setAdapter(recyclerAdapter);
     }
 
@@ -53,21 +53,22 @@ public class MainActivity extends AppCompatActivity implements RideRecyclerAdapt
         startActivityForResult(intent, ADD_RIDE_REQUEST);
     }
 
-    //TODO: implement this like delete listener?
-    public void onRideClick(View view) {
+    @Override
+    public void onItemClick(View itemView, int position) {
         Intent intent = new Intent(this, RideEditorActivity.class);
-        int position = recyclerView.getChildLayoutPosition(view);
-
         intent.putExtra("ride", rideList.get(position));
         intent.putExtra("position", position);
+
         startActivityForResult(intent, EDIT_RIDE_REQUEST);
     }
 
     @Override
-    public void onDeleteClick(int position) {
+    public void onItemDeleteClick(View itemView, int position) {
         rideList.remove(position);
         recyclerAdapter.notifyItemRemoved(position);
+
         updateDistanceTotal();
+
         if (rideList.isEmpty()) {
             recyclerView.setVisibility(View.GONE);
             findViewById(R.id.emptyList).setVisibility(View.VISIBLE);
@@ -79,7 +80,7 @@ public class MainActivity extends AppCompatActivity implements RideRecyclerAdapt
         if (requestCode == ADD_RIDE_REQUEST && resultCode == RESULT_OK) {
             Ride ride = (Ride) resultIntent.getSerializableExtra("ride");
             rideList.add(ride);
-            recyclerAdapter.notifyItemInserted(rideList.size()-1);
+            recyclerAdapter.notifyItemInserted(recyclerAdapter.getItemCount()-1);
             if (rideList.size() == 1) {
                 findViewById(R.id.emptyList).setVisibility(View.GONE);
                 recyclerView.setVisibility(View.VISIBLE);
