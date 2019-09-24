@@ -1,4 +1,4 @@
-package com.example.tbojovic_ridebook;
+package com.example.tbojovic_ridebook.models;
 
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -75,7 +75,7 @@ public class Ride implements Serializable {
         this.comment = comment;
     }
 
-    static double totalDistance(List<Ride> rides) {
+    static public double totalDistance(List<Ride> rides) {
         double total = 0;
         for (Ride ride : rides) {
             total += ride.getDistance();

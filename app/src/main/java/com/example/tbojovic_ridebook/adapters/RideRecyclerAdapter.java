@@ -1,13 +1,15 @@
-package com.example.tbojovic_ridebook;
+package com.example.tbojovic_ridebook.adapters;
 
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.tbojovic_ridebook.R;
+import com.example.tbojovic_ridebook.models.Ride;
 
 import java.util.List;
 

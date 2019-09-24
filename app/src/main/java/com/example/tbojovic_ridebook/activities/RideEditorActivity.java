@@ -1,4 +1,4 @@
-package com.example.tbojovic_ridebook;
+package com.example.tbojovic_ridebook.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
@@ -10,7 +10,11 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import java.io.Serializable;
+import com.example.tbojovic_ridebook.fragments.DatePickerFragment;
+import com.example.tbojovic_ridebook.R;
+import com.example.tbojovic_ridebook.models.Ride;
+import com.example.tbojovic_ridebook.fragments.TimePickerFragment;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;

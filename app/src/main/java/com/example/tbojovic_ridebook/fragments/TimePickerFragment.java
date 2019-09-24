@@ -1,4 +1,4 @@
-package com.example.tbojovic_ridebook;
+package com.example.tbojovic_ridebook.fragments;
 
 
 import android.app.Dialog;
@@ -9,6 +9,8 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 
 import androidx.fragment.app.DialogFragment;
+
+import com.example.tbojovic_ridebook.R;
 
 import java.time.LocalTime;
 

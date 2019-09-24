@@ -1,4 +1,4 @@
-package com.example.tbojovic_ridebook;
+package com.example.tbojovic_ridebook.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -10,14 +10,16 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
+import com.example.tbojovic_ridebook.R;
+import com.example.tbojovic_ridebook.models.Ride;
+import com.example.tbojovic_ridebook.adapters.RideRecyclerAdapter;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements RideRecyclerAdapter.OnDeleteClickListener {
     private RecyclerView recyclerView;
-    private RideRecyclerAdapter mAdapter;
+    private RideRecyclerAdapter recyclerAdapter;
     private List<Ride> rideList;
     final int ADD_RIDE_REQUEST = 1;
     final int EDIT_RIDE_REQUEST = 2;
@@ -41,14 +43,14 @@ public class MainActivity extends AppCompatActivity implements RideRecyclerAdapt
 
         updateDistanceTotal();
 
-        this.mAdapter = new RideRecyclerAdapter(rideList, this);
-        this.recyclerView.setAdapter(mAdapter);
+        this.recyclerAdapter = new RideRecyclerAdapter(rideList, this);
+        this.recyclerView.setAdapter(recyclerAdapter);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        mAdapter.resetSelectedPosition();
+        recyclerAdapter.resetSelectedPosition();
     }
 
     public void handleAddClick(View view) {
@@ -70,7 +72,7 @@ public class MainActivity extends AppCompatActivity implements RideRecyclerAdapt
     @Override
     public void onDeleteClick(int position) {
         rideList.remove(position);
-        mAdapter.notifyItemRemoved(position);
+        recyclerAdapter.notifyItemRemoved(position);
         updateDistanceTotal();
         if (rideList.isEmpty()) {
             recyclerView.setVisibility(View.GONE);
@@ -83,7 +85,7 @@ public class MainActivity extends AppCompatActivity implements RideRecyclerAdapt
         if (requestCode == ADD_RIDE_REQUEST && resultCode == RESULT_OK) {
             Ride ride = (Ride) resultIntent.getSerializableExtra("ride");
             rideList.add(ride);
-            mAdapter.notifyItemInserted(rideList.size()-1);
+            recyclerAdapter.notifyItemInserted(rideList.size()-1);
             if (rideList.size() == 1) {
                 findViewById(R.id.emptyList).setVisibility(View.GONE);
                 recyclerView.setVisibility(View.VISIBLE);
@@ -92,7 +94,7 @@ public class MainActivity extends AppCompatActivity implements RideRecyclerAdapt
             Ride ride = (Ride) resultIntent.getSerializableExtra("ride");
             int position = resultIntent.getIntExtra("position", -1);
             rideList.set(position, ride);
-            mAdapter.notifyItemChanged(position);
+            recyclerAdapter.notifyItemChanged(position);
         }
         updateDistanceTotal();
     }

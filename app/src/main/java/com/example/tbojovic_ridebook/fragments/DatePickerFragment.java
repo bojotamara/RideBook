@@ -1,4 +1,4 @@
-package com.example.tbojovic_ridebook;
+package com.example.tbojovic_ridebook.fragments;
 
 
 import android.app.DatePickerDialog;
@@ -8,6 +8,8 @@ import android.widget.DatePicker;
 import android.widget.TextView;
 
 import androidx.fragment.app.DialogFragment;
+
+import com.example.tbojovic_ridebook.R;
 
 import java.time.LocalDate;
 
