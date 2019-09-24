@@ -5,7 +5,6 @@
     android:layout_height="wrap_content"
     android:gravity="center"
     android:longClickable="true"
-    android:onClick="onRideClick"
     android:orientation="horizontal"
     android:background="?android:attr/selectableItemBackground"
     android:paddingVertical="14dp">

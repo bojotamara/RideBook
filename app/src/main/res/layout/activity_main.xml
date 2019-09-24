@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity" >
+    tools:context=".activities.MainActivity" >
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/addButton"
@@ -14,7 +14,7 @@
         android:layout_marginBottom="12dp"
         android:backgroundTint="@color/colorAccent"
         android:clickable="true"
-        android:onClick="handleAddClick"
+        android:onClick="onAddClick"
         app:backgroundTint="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
