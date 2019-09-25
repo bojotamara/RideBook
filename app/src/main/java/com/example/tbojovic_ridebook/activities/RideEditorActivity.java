@@ -7,9 +7,11 @@ import androidx.fragment.app.DialogFragment;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.tbojovic_ridebook.fragments.DatePickerFragment;
 import com.example.tbojovic_ridebook.R;
@@ -76,7 +78,9 @@ public class RideEditorActivity extends AppCompatActivity
             setResult(Activity.RESULT_OK, returnIntent);
             finish();
         } else {
-            //TODO: show a message
+            Toast toast = Toast.makeText(this, R.string.editor_warning, Toast.LENGTH_LONG);
+            toast.setGravity(Gravity.BOTTOM, 0, 200);
+            toast.show();
         }
     }
 
