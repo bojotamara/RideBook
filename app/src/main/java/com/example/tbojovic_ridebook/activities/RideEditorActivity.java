@@ -1,6 +1,6 @@
 package com.example.tbojovic_ridebook.activities;
 
-import androidx.annotation.Nullable;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 
@@ -20,15 +20,24 @@ import com.example.tbojovic_ridebook.fragments.TimePickerFragment;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.HashMap;
 
+/**
+ * This class is an activity that displays a form to add a new {@link Ride} or to edit one.
+ * The purpose is to handle user input and pass a new or edited Ride object back to {@link MainActivity},
+ * where it will be added to the list or changed.
+ * It validates user input through the {@link EditText} views and verifies that the user filled in
+ * the required fields before sending a Ride back.
+ * It also receives the selected date/time from the DatePickerFragment/TimePickerFragment.
+ */
 public class RideEditorActivity extends AppCompatActivity
         implements DatePickerFragment.OnDatePickerListener, TimePickerFragment.OnTimePickerListener {
 
     private TextView dateInput, timeInput;
     private EditText distanceInput, speedInput, cadenceInput, commentInput;
+    private Ride ride;
+
+    // the position in the list of the ride being edited. -1 if a new ride is being added
     private int position = -1;
 
     @Override
@@ -38,8 +47,9 @@ public class RideEditorActivity extends AppCompatActivity
         setupViews();
 
         Intent intent = getIntent();
-        Ride ride = (Ride) intent.getSerializableExtra("ride");
+        ride = (Ride) intent.getSerializableExtra("ride");
 
+        // A Ride is passed to the intent on an edit request
         if (ride != null) {
             position = intent.getIntExtra("position", -1);
             setTitle(R.string.editor_title_edit);
@@ -68,13 +78,17 @@ public class RideEditorActivity extends AppCompatActivity
     }
 
     public void onSave(View view) {
-        Ride ride = getRideFromInput();
-        if (ride != null) {
+        // getRideFromInput() returns null if a Ride could not be constructed from the view
+        HashMap<TextView, String> inputs = getInputs();
+        if (!inputs.isEmpty()) {
             Intent returnIntent = new Intent();
-            returnIntent.putExtra("ride", ride);
-            if (position != -1) {
+            if (position == -1) {
+                ride = getNewRideFromInput(inputs);
+            } else {
+                editRide(inputs);
                 returnIntent.putExtra("position", position);
             }
+            returnIntent.putExtra("ride", ride);
             setResult(Activity.RESULT_OK, returnIntent);
             finish();
         } else {
@@ -84,27 +98,56 @@ public class RideEditorActivity extends AppCompatActivity
         }
     }
 
-    @Nullable
-    private Ride getRideFromInput() {
-        String dateString = dateInput.getText().toString(),
-            timeString = timeInput.getText().toString(),
-            distanceString = distanceInput.getText().toString(),
-            speedString = speedInput.getText().toString(),
-            cadenceString = cadenceInput.getText().toString(),
-            comment = commentInput.getText().toString();
-
-        String []requiredStrings = {dateString, timeString, distanceString, speedString, cadenceString};
-        List<String> requiredInputs = new ArrayList<>(Arrays.asList(requiredStrings));
-
-        if (requiredInputs.contains(null) || requiredInputs.contains("")) {
-            return null;
+    // Construct a Ride object from the user input.
+    private Ride getNewRideFromInput(HashMap<TextView, String> inputs) {
+        if (inputs.containsKey(commentInput)) {
+            return new Ride(LocalDate.parse(inputs.get(dateInput)), LocalTime.parse(inputs.get(timeInput)),
+                    Double.parseDouble(inputs.get(distanceInput)), Double.parseDouble(inputs.get(speedInput)),
+                    Integer.parseInt(inputs.get(cadenceInput)), inputs.get(commentInput));
         }
-
-        return new Ride(LocalDate.parse(dateString), LocalTime.parse(timeString),
-                Double.parseDouble(distanceString), Double.parseDouble(speedString),
-                Integer.parseInt(cadenceString), comment);
+        return new Ride(LocalDate.parse(inputs.get(dateInput)), LocalTime.parse(inputs.get(timeInput)),
+                Double.parseDouble(inputs.get(distanceInput)), Double.parseDouble(inputs.get(speedInput)),
+                Integer.parseInt(inputs.get(cadenceInput)));
     }
 
+    // Edit the existing ride based on the user input
+    private void editRide(HashMap<TextView, String> inputs) {
+        ride.setDate(LocalDate.parse(inputs.get(dateInput)));
+        ride.setTime(LocalTime.parse(inputs.get(timeInput)));
+        ride.setDistance(Double.parseDouble(inputs.get(distanceInput)));
+        ride.setAverageSpeed(Double.parseDouble(inputs.get(speedInput)));
+        ride.setAverageCadence(Integer.parseInt(inputs.get(cadenceInput)));
+        if (inputs.containsKey(commentInput)) {
+            ride.setComment(inputs.get(commentInput));
+        }
+    }
+
+    // Return a hashmap with the string value of the user inputs
+    // Return an empty hashmap if the required fields are not inputted
+    private HashMap<TextView, String> getInputs() {
+        HashMap<TextView, String> inputMap = new HashMap<TextView, String>();
+
+        TextView []requiredViews = {dateInput, timeInput, distanceInput, speedInput, cadenceInput};
+
+        for (TextView view: requiredViews) {
+            String string = view.getText().toString();
+            inputMap.put(view, string);
+        }
+
+        if (inputMap.containsValue(null) || inputMap.containsValue("")) {
+            inputMap.clear();
+            return inputMap;
+        }
+
+        String comment = commentInput.getText().toString();
+        if (!comment.isEmpty()) {
+            inputMap.put(commentInput, comment);
+        }
+
+        return inputMap;
+    }
+
+    // Given a Ride to edit, set the input views to match the Ride attributes
     private void populateInput(Ride ride) {
         dateInput.setText(ride.getDate().toString());
         timeInput.setText(ride.getTime().toString());
@@ -114,6 +157,7 @@ public class RideEditorActivity extends AppCompatActivity
         commentInput.setText(String.valueOf(ride.getComment()));
     }
 
+    // Set the class attributes up with the corresponding views
     private void setupViews() {
         dateInput = findViewById(R.id.dateInput);
         timeInput = findViewById(R.id.timeInput);

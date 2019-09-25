@@ -5,6 +5,11 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
+/**
+ * This class represents a bike ride. It is a simple model class, with getters and setters for
+ * the bike ride attributes. It has a static method to compute the total distance for a list of rides.
+ * The purpose is to hold data about the attributes of the bike ride.
+ */
 public class Ride implements Serializable {
     private LocalDate date;
     private LocalTime time;
@@ -27,6 +32,7 @@ public class Ride implements Serializable {
         this.comment = comment;
     }
 
+    // A static method that calculates the total distance of a list of bike rides.
     static public double totalDistance(List<Ride> rides) {
         double total = 0;
         for (Ride ride : rides) {

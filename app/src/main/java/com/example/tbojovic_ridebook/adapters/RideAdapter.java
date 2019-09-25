@@ -14,12 +14,18 @@ import com.example.tbojovic_ridebook.models.Ride;
 
 import java.util.ArrayList;
 
-// Adapter creates view holders as needed, and binds view holders to their data
-// Convert an object at a position into a list row item
+/**
+ * This class is the adapter class to a {@link RecyclerView} containing {@link Ride} objects.
+ * The purpose is to connect the Ride data with the RecyclerView and to create the
+ * {@link ViewHolder} objects that will display the data. It converts a Ride object at a position
+ * to the view in the list.
+ */
 public class RideAdapter extends RecyclerView.Adapter<RideAdapter.ViewHolder> {
 
     private ArrayList<Ride> rideList;
     private OnItemClickListener listener;
+
+    // holds the index of the ride that's selected, and thus has a delete button beside it
     private int selectedPosition = RecyclerView.NO_POSITION;
 
     public interface OnItemClickListener {
@@ -27,18 +33,22 @@ public class RideAdapter extends RecyclerView.Adapter<RideAdapter.ViewHolder> {
         void onItemDeleteClick(int pos);
     }
 
-    // Initial data is passed in from the constructor
+    // A listener must be provided to handle item clicks and deletes of item.
+    // The adapter shouldn't handle manipulation of data, it should only handle
+    // binding the views and data.
     public RideAdapter(ArrayList<Ride> data, OnItemClickListener listener) {
         this.rideList = data;
         this.listener = listener;
     }
 
-    // Provide a reference to the views for each data item
-    // Complex data items may need more than one view per item, and
-    // you provide access to all the views for a data item in a view holder
+    /**
+     * This class provides a reference to the view in the the RecyclerView for each data item.
+     * The purpose is to hold information about the views and to handle clicks on items.
+     */
     public class ViewHolder extends RecyclerView.ViewHolder
             implements View.OnLongClickListener, View.OnClickListener {
 
+        // views are package-private, only available to the ViewHolder & encompassing RideAdapter
         TextView tvDate, tvTime, tvDistance;
         ImageButton deleteButton;
 
@@ -54,10 +64,8 @@ public class RideAdapter extends RecyclerView.Adapter<RideAdapter.ViewHolder> {
                 @Override
                 public void onClick(View v) {
                     int position = getAdapterPosition();
-                    if (position != RecyclerView.NO_POSITION) {
-                        listener.onItemDeleteClick(position);
-                        selectedPosition = RecyclerView.NO_POSITION;
-                    }
+                    listener.onItemDeleteClick(position);
+                    selectedPosition = RecyclerView.NO_POSITION;
                 }
             });
             itemView.setOnClickListener(this);
@@ -67,49 +75,45 @@ public class RideAdapter extends RecyclerView.Adapter<RideAdapter.ViewHolder> {
         @Override
         public void onClick(View v) {
             int position = getAdapterPosition();
-            if (position != RecyclerView.NO_POSITION) {
-                listener.onItemClick(position);
-            }
+            listener.onItemClick(position);
         }
 
         @Override
         public boolean onLongClick(View v) {
             int position = getAdapterPosition();
-            if (position != RecyclerView.NO_POSITION) {
-                if (selectedPosition == position) {
-                    selectedPosition = RecyclerView.NO_POSITION;
-                } else {
-                    int oldSelected = selectedPosition;
-                    selectedPosition = position;
-                    if (oldSelected != RecyclerView.NO_POSITION) {
-                        notifyItemChanged(oldSelected);
-                    }
+
+            // only one item can be selected at a time
+            if (selectedPosition == position) {
+                selectedPosition = RecyclerView.NO_POSITION;
+            } else {
+                int oldSelected = selectedPosition;
+                selectedPosition = position;
+                if (oldSelected != RecyclerView.NO_POSITION) {
+                    notifyItemChanged(oldSelected);
                 }
-                notifyItemChanged(position);
             }
+            notifyItemChanged(position);
+
             return true;
         }
     }
 
-    // Create new views (invoked by the layout manager)
     @Override
     public RideAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        // create a new view
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.ridesview_row, parent, false);
         return new ViewHolder(itemView);
     }
 
-    // Replace the contents of a view (invoked by the layout manager)
+    // Bind the view with the data from the Ride object
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        // - get element from your dataset at this position
-        // - replace the contents of the view with that element
         Ride ride = rideList.get(position);
         holder.tvDate.setText(ride.getDate().toString());
         holder.tvTime.setText(ride.getTime().toString());
         holder.tvDistance.setText(String.valueOf(ride.getDistance()));
 
+        // the delete button should only show on the item that has been selected with a long click
         if (selectedPosition == position) {
             holder.deleteButton.setVisibility(View.VISIBLE);
         } else {
@@ -117,12 +121,12 @@ public class RideAdapter extends RecyclerView.Adapter<RideAdapter.ViewHolder> {
         }
     }
 
-    // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
         return rideList.size();
     }
 
+    // deselect the selected item, this effectively removes the delete button
     public void resetSelectedPosition() {
         selectedPosition = RecyclerView.NO_POSITION;
         notifyDataSetChanged();

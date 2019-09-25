@@ -9,24 +9,25 @@ import android.widget.DatePicker;
 
 import androidx.fragment.app.DialogFragment;
 
-
 import java.time.LocalDate;
 
 /**
- * A simple {@link DialogFragment} subclass.
+ * This fragment class allows for the selection of a date. A dialog pops up with a calender, where
+ * the user can select the date desired.
+ * The purpose is to allow for easy date selection decoupled from a particular activity.
+ * The activity that shows the fragment must implement the {@link OnDatePickerListener} interface
+ * to receive the time picked.
  */
 public class DatePickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
     private OnDatePickerListener listener;
 
-    //TODO: better name
     public interface OnDatePickerListener {
         void onDatePicked(LocalDate date);
     }
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        // Use the current date as the default date in the picker
-        //TODO: use the current date OR the one already selected in the date picker
+        // default date in the picker dialog is the current date
         final LocalDate date = LocalDate.now();
         int year = date.getYear();
         int month = date.getMonthValue() - 1; // DatePickerDialog accepts a zero indexed month
@@ -46,8 +47,11 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
         }
     }
 
+    @Override
     public void onDateSet(DatePicker view, int year, int month, int day) {
         LocalDate date = LocalDate.of(year, month + 1, day);
+
+        // bubble the event up to the activity
         listener.onDatePicked(date);
     }
 }

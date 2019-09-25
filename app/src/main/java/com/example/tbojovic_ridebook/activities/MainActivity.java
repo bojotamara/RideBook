@@ -1,5 +1,6 @@
 package com.example.tbojovic_ridebook.activities;
 
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -15,6 +16,15 @@ import com.example.tbojovic_ridebook.models.Ride;
 import com.example.tbojovic_ridebook.adapters.RideAdapter;
 
 import java.util.ArrayList;
+
+/**
+ * This class is an activity that displays the bike ride list. From here the user can add, edit,
+ * view and delete rides. A total distance of all the rides is also displayed.
+ * The purpose is to display and manipulate the bike ride list. While the details of the
+ * manipulation are sent to other classes (eg. {@link RideEditorActivity} ), the actual
+ * addition/deletion/change to the data is performed here, after the change is received through
+ * callback functions.
+ */
 public class MainActivity extends AppCompatActivity implements RideAdapter.OnItemClickListener {
     private RecyclerView recyclerView;
     private RideAdapter recyclerAdapter;
@@ -45,6 +55,8 @@ public class MainActivity extends AppCompatActivity implements RideAdapter.OnIte
     @Override
     public void onResume() {
         super.onResume();
+
+        // clear the delete button when returning to the activity
         recyclerAdapter.resetSelectedPosition();
     }
 

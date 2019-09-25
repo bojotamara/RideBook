@@ -11,7 +11,13 @@ import androidx.fragment.app.DialogFragment;
 
 import java.time.LocalTime;
 
-
+/**
+ * This fragment class allows for the selection of a time. A dialog pops up with a clock, where
+ * the user can select the time desired.
+ * The purpose is to allow for easy time selection decoupled from a particular activity.
+ * The activity that shows the fragment must implement the {@link OnTimePickerListener} interface
+ * to receive the date picked.
+ */
 public class TimePickerFragment extends DialogFragment implements TimePickerDialog.OnTimeSetListener {
     private OnTimePickerListener listener;
 
@@ -21,13 +27,11 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        // Use the current time as the default values for the picker
-        //TODO: use the current date OR the one already selected in the date picker
+        // default time in the picker dialog is the current time
         final LocalTime time = LocalTime.now();
         int hour = time.getHour();
         int minute = time.getMinute();
 
-        // Create a new instance of TimePickerDialog and return it
         return new TimePickerDialog(getActivity(), this, hour, minute, true);
     }
 
@@ -42,8 +46,11 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
         }
     }
 
+    @Override
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
         LocalTime time = LocalTime.of(hourOfDay, minute);
+
+        // bubble the event up to the activity
         listener.onTimePicked(time);
     }
 }
