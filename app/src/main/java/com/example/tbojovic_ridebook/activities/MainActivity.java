@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity implements RideAdapter.OnIte
     }
 
     @Override
-    public void onItemClick(View itemView, int position) {
+    public void onItemClick(int position) {
         Intent intent = new Intent(this, RideEditorActivity.class);
         intent.putExtra("ride", rideList.get(position));
         intent.putExtra("position", position);
@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity implements RideAdapter.OnIte
     }
 
     @Override
-    public void onItemDeleteClick(View itemView, int position) {
+    public void onItemDeleteClick(int position) {
         rideList.remove(position);
         recyclerAdapter.notifyItemRemoved(position);
 
@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity implements RideAdapter.OnIte
         if (requestCode == ADD_RIDE_REQUEST && resultCode == RESULT_OK) {
             Ride ride = (Ride) resultIntent.getSerializableExtra("ride");
             rideList.add(ride);
-            recyclerAdapter.notifyItemInserted(recyclerAdapter.getItemCount()-1);
+            recyclerAdapter.notifyItemInserted(rideList.size()-1);
             if (rideList.size() == 1) {
                 findViewById(R.id.emptyList).setVisibility(View.GONE);
                 recyclerView.setVisibility(View.VISIBLE);

@@ -23,8 +23,8 @@ public class RideAdapter extends RecyclerView.Adapter<RideAdapter.ViewHolder> {
     private int selectedPosition = RecyclerView.NO_POSITION;
 
     public interface OnItemClickListener {
-        void onItemClick(View itemView, int pos);
-        void onItemDeleteClick(View itemView, int pos);
+        void onItemClick(int pos);
+        void onItemDeleteClick(int pos);
     }
 
     // Initial data is passed in from the constructor
@@ -36,11 +36,13 @@ public class RideAdapter extends RecyclerView.Adapter<RideAdapter.ViewHolder> {
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnLongClickListener {
-        private TextView tvDate, tvTime, tvDistance;
-        private ImageButton deleteButton;
+    public class ViewHolder extends RecyclerView.ViewHolder
+            implements View.OnLongClickListener, View.OnClickListener {
 
-        public ViewHolder(View itemView) {
+        TextView tvDate, tvTime, tvDistance;
+        ImageButton deleteButton;
+
+        ViewHolder(View itemView) {
             super(itemView);
 
             tvDate = itemView.findViewById(R.id.RowDate);
@@ -50,37 +52,23 @@ public class RideAdapter extends RecyclerView.Adapter<RideAdapter.ViewHolder> {
 
             deleteButton.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View view) {
+                public void onClick(View v) {
                     int position = getAdapterPosition();
                     if (position != RecyclerView.NO_POSITION) {
-                        listener.onItemDeleteClick(view, position);
+                        listener.onItemDeleteClick(position);
                         selectedPosition = RecyclerView.NO_POSITION;
                     }
                 }
             });
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    int position = getAdapterPosition();
-                    if (position != RecyclerView.NO_POSITION) {
-                        listener.onItemClick(view, position);
-                    }
-                }
-            });
+            itemView.setOnClickListener(this);
             itemView.setOnLongClickListener(this);
         }
 
-        public void bind(Ride ride) {
-            //TODO: clean this shit up
-            tvDate.setText(ride.getDate().toString());
-            tvTime.setText(ride.getTime().toString());
-            tvDistance.setText(String.valueOf(ride.getDistance()));
-            if (selectedPosition == -1) {
-                deleteButton.setVisibility(View.INVISIBLE);
-            } else if (selectedPosition == getAdapterPosition()) {
-                deleteButton.setVisibility(View.VISIBLE);
-            } else {
-                deleteButton.setVisibility(View.INVISIBLE);
+        @Override
+        public void onClick(View v) {
+            int position = getAdapterPosition();
+            if (position != RecyclerView.NO_POSITION) {
+                listener.onItemClick(position);
             }
         }
 
@@ -88,14 +76,16 @@ public class RideAdapter extends RecyclerView.Adapter<RideAdapter.ViewHolder> {
         public boolean onLongClick(View v) {
             int position = getAdapterPosition();
             if (position != RecyclerView.NO_POSITION) {
-                deleteButton.setVisibility(View.VISIBLE);
-                if (selectedPosition != getAdapterPosition()) {
-                    notifyItemChanged(selectedPosition);
-                    selectedPosition = getAdapterPosition();
-                } else if (selectedPosition == getAdapterPosition()) {
-                    deleteButton.setVisibility(View.INVISIBLE);
+                if (selectedPosition == position) {
                     selectedPosition = RecyclerView.NO_POSITION;
+                } else {
+                    int oldSelected = selectedPosition;
+                    selectedPosition = position;
+                    if (oldSelected != RecyclerView.NO_POSITION) {
+                        notifyItemChanged(oldSelected);
+                    }
                 }
+                notifyItemChanged(position);
             }
             return true;
         }
@@ -115,7 +105,16 @@ public class RideAdapter extends RecyclerView.Adapter<RideAdapter.ViewHolder> {
     public void onBindViewHolder(ViewHolder holder, int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-        holder.bind(rideList.get(position));
+        Ride ride = rideList.get(position);
+        holder.tvDate.setText(ride.getDate().toString());
+        holder.tvTime.setText(ride.getTime().toString());
+        holder.tvDistance.setText(String.valueOf(ride.getDistance()));
+
+        if (selectedPosition == position) {
+            holder.deleteButton.setVisibility(View.VISIBLE);
+        } else {
+            holder.deleteButton.setVisibility(View.INVISIBLE);
+        }
     }
 
     // Return the size of your dataset (invoked by the layout manager)
