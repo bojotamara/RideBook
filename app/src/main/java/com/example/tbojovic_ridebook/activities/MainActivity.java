@@ -29,8 +29,8 @@ public class MainActivity extends AppCompatActivity implements RideAdapter.OnIte
     private RecyclerView recyclerView;
     private RideAdapter recyclerAdapter;
     private ArrayList<Ride> rideList;
-    final int ADD_RIDE_REQUEST = 1;
-    final int EDIT_RIDE_REQUEST = 2;
+    static final int ADD_RIDE_REQUEST = 1;
+    static final int EDIT_RIDE_REQUEST = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

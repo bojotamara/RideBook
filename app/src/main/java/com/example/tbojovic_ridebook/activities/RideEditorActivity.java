@@ -85,7 +85,7 @@ public class RideEditorActivity extends AppCompatActivity
             if (position == -1) {
                 ride = getNewRideFromInput(inputs);
             } else {
-                editRide(inputs);
+                editRideFromInput(inputs);
                 returnIntent.putExtra("position", position);
             }
             returnIntent.putExtra("ride", ride);
@@ -98,28 +98,24 @@ public class RideEditorActivity extends AppCompatActivity
         }
     }
 
-    // Construct a Ride object from the user input.
-    private Ride getNewRideFromInput(HashMap<TextView, String> inputs) {
-        if (inputs.containsKey(commentInput)) {
-            return new Ride(LocalDate.parse(inputs.get(dateInput)), LocalTime.parse(inputs.get(timeInput)),
-                    Double.parseDouble(inputs.get(distanceInput)), Double.parseDouble(inputs.get(speedInput)),
-                    Integer.parseInt(inputs.get(cadenceInput)), inputs.get(commentInput));
-        }
-        return new Ride(LocalDate.parse(inputs.get(dateInput)), LocalTime.parse(inputs.get(timeInput)),
-                Double.parseDouble(inputs.get(distanceInput)), Double.parseDouble(inputs.get(speedInput)),
-                Integer.parseInt(inputs.get(cadenceInput)));
+    // Set the class attributes up with the corresponding views
+    private void setupViews() {
+        dateInput = findViewById(R.id.dateInput);
+        timeInput = findViewById(R.id.timeInput);
+        distanceInput = findViewById(R.id.distanceInput);
+        speedInput = findViewById(R.id.speedInput);
+        cadenceInput = findViewById(R.id.cadenceInput);
+        commentInput = findViewById(R.id.commentInput);
     }
 
-    // Edit the existing ride based on the user input
-    private void editRide(HashMap<TextView, String> inputs) {
-        ride.setDate(LocalDate.parse(inputs.get(dateInput)));
-        ride.setTime(LocalTime.parse(inputs.get(timeInput)));
-        ride.setDistance(Double.parseDouble(inputs.get(distanceInput)));
-        ride.setAverageSpeed(Double.parseDouble(inputs.get(speedInput)));
-        ride.setAverageCadence(Integer.parseInt(inputs.get(cadenceInput)));
-        if (inputs.containsKey(commentInput)) {
-            ride.setComment(inputs.get(commentInput));
-        }
+    // Given a Ride to edit, set the input views to match the Ride attributes
+    private void populateInput(Ride ride) {
+        dateInput.setText(ride.getDate().toString());
+        timeInput.setText(ride.getTime().toString());
+        distanceInput.setText(String.valueOf(ride.getDistance()));
+        speedInput.setText(String.valueOf(ride.getAverageSpeed()));
+        cadenceInput.setText(String.valueOf(ride.getAverageCadence()));
+        commentInput.setText(String.valueOf(ride.getComment()));
     }
 
     // Return a hashmap with the string value of the user inputs
@@ -147,24 +143,28 @@ public class RideEditorActivity extends AppCompatActivity
         return inputMap;
     }
 
-    // Given a Ride to edit, set the input views to match the Ride attributes
-    private void populateInput(Ride ride) {
-        dateInput.setText(ride.getDate().toString());
-        timeInput.setText(ride.getTime().toString());
-        distanceInput.setText(String.valueOf(ride.getDistance()));
-        speedInput.setText(String.valueOf(ride.getAverageSpeed()));
-        cadenceInput.setText(String.valueOf(ride.getAverageCadence()));
-        commentInput.setText(String.valueOf(ride.getComment()));
+    // Construct a Ride object from the user input.
+    private Ride getNewRideFromInput(HashMap<TextView, String> inputs) {
+        if (inputs.containsKey(commentInput)) {
+            return new Ride(LocalDate.parse(inputs.get(dateInput)), LocalTime.parse(inputs.get(timeInput)),
+                    Double.parseDouble(inputs.get(distanceInput)), Double.parseDouble(inputs.get(speedInput)),
+                    Integer.parseInt(inputs.get(cadenceInput)), inputs.get(commentInput));
+        }
+        return new Ride(LocalDate.parse(inputs.get(dateInput)), LocalTime.parse(inputs.get(timeInput)),
+                Double.parseDouble(inputs.get(distanceInput)), Double.parseDouble(inputs.get(speedInput)),
+                Integer.parseInt(inputs.get(cadenceInput)));
     }
 
-    // Set the class attributes up with the corresponding views
-    private void setupViews() {
-        dateInput = findViewById(R.id.dateInput);
-        timeInput = findViewById(R.id.timeInput);
-        distanceInput = findViewById(R.id.distanceInput);
-        speedInput = findViewById(R.id.speedInput);
-        cadenceInput = findViewById(R.id.cadenceInput);
-        commentInput = findViewById(R.id.commentInput);
+    // Edit the existing ride based on the user input
+    private void editRideFromInput(HashMap<TextView, String> inputs) {
+        ride.setDate(LocalDate.parse(inputs.get(dateInput)));
+        ride.setTime(LocalTime.parse(inputs.get(timeInput)));
+        ride.setDistance(Double.parseDouble(inputs.get(distanceInput)));
+        ride.setAverageSpeed(Double.parseDouble(inputs.get(speedInput)));
+        ride.setAverageCadence(Integer.parseInt(inputs.get(cadenceInput)));
+        if (inputs.containsKey(commentInput)) {
+            ride.setComment(inputs.get(commentInput));
+        }
     }
 
 }
